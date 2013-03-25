@@ -20,6 +20,7 @@ public class GwClient {
 
 	public static void main(String[] args) throws SOAPException, IOException, SAXException, ParserConfigurationException, TransformerException 
 	{
+		System.out.println("xx");
 		RequestXccRegister req = new RequestXccRegister("gwclient", 
 														"http://192.168.1.49:8090/gwclient", 
 														1, 
