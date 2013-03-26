@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -52,20 +53,30 @@ public class GwClient {
 	    String line;
 	    char[] buf = new char[1000];
 	    
+	    int headerRowCount = 1;
+	    String ctlLength = "";
 	    while ((line = rd.readLine()) != null && !line.isEmpty()) 
 	    {
-		      //.out.println(line);
+	    	if(headerRowCount == 4)
+	    	{
+		      ctlLength = line.substring(16);
+	    	}
+	    	headerRowCount++;
 		}
 	    
-	    rd.read(buf, 0, 1000);
+	    rd.read(buf, 0, Integer.parseInt(ctlLength));
 	    	    
 	    String response = new String(buf);
 	    
-	   response = response.trim();
-	   ResponseXccRegister r = new ResponseXccRegister(response);
+	    ResponseXccRegister r = new ResponseXccRegister(response);
 	    
 	    wr.close();
 	    rd.close();
+	    socket.close();
+	    
+	    XccServer server = new XccServer();
+	    server.setListening(true);
+	    server.start();
 	}
 
 }
