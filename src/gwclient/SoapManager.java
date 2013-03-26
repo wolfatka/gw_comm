@@ -1,9 +1,11 @@
 package gwclient;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 
@@ -25,14 +27,15 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+
 public class SoapManager 
 {
 	public static String soapToXML(String soapStr) throws IOException,
 			SOAPException, TransformerException {
 		// Convert to SOAPMessage and extract body as DOM Document
 		InputStream is = new ByteArrayInputStream(soapStr.getBytes());
-		SOAPMessage request = MessageFactory.newInstance(
-				SOAPConstants.SOAP_1_2_PROTOCOL).createMessage(null, is);
+		
+		SOAPMessage request = MessageFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL).createMessage(null, is);
 
 		SOAPBody body = request.getSOAPBody();
 		Document doc = body.extractContentAsDocument();

@@ -20,9 +20,9 @@ public class GwClient {
 
 	public static void main(String[] args) throws SOAPException, IOException, SAXException, ParserConfigurationException, TransformerException 
 	{
-		System.out.println("xx");
+		
 		RequestXccRegister req = new RequestXccRegister("gwclient", 
-														"http://192.168.1.49:8090/gwclient", 
+														"http://192.168.1.55:8090/gwclient", 
 														1, 
 														"CONTINUE_PROCESSING", 
 														"CREATED AUTHORIZE_CALL ADDRESS_ANALYZE REDIRECTED ALERTING CONNECTED TRANSFERRED CALL_DELIVERY DISCONNECTED HANDOFFLEAVE HANDOFFJOIN",
@@ -31,9 +31,8 @@ public class GwClient {
 														"http://192.168.1.250/cisco_xcc");
 		
 		String xml = req.createSOAPMsg();
-		//System.out.print(xml);
 		
-	    Socket socket = new Socket(InetAddress.getByName("192.168.1.250"), 8090, InetAddress.getByName("192.168.1.49"), 8090);
+	    Socket socket = new Socket(InetAddress.getByName("192.168.1.250"), 8090, InetAddress.getByName("192.168.1.55"), 8090);
 	    
 	    String path = "/cisco_xcc";
 	    BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF8"));
@@ -45,6 +44,8 @@ public class GwClient {
 
 	    wr.write(xml);
 	    wr.flush();
+	    
+	    //System.out.print(xml);
 
 	    BufferedReader rd = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	    
@@ -53,12 +54,15 @@ public class GwClient {
 	    
 	    while ((line = rd.readLine()) != null && !line.isEmpty()) 
 	    {
-		      System.out.println(line);
+		      //.out.println(line);
 		}
 	    
 	    rd.read(buf, 0, 1000);
+	    	    
+	    String response = new String(buf);
 	    
-	    System.out.print(buf);
+	   response = response.trim();
+	   ResponseXccRegister r = new ResponseXccRegister(response);
 	    
 	    wr.close();
 	    rd.close();
